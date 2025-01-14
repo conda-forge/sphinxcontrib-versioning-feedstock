@@ -6,27 +6,29 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 1a5fe9b4e36020488d0d037fccc0b21aaf71b80425cad42ef4a5e5c3c193d3cd
 
 build:
   noarch: python
-  number: 0
-  script: python -m pip install --no-deps --ignore-installed .
+  number: 1
+  script: {{ PYTHON }} -m pip install . --no-deps -vv
   entry_points:
     - sphinx-versioning = sphinxcontrib.versioning.__main__:cli
 
 requirements:
   host:
-    - python
+    - python {{ python_min }}
     - pip
   run:
-    - python
+    - python >={{ python_min }}
     - click
     - colorclass
     - sphinx
 
 test:
+  requires:
+    - python {{ python_min }}
   commands:
     - sphinx-versioning --help
 
